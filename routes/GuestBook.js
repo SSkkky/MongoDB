@@ -16,7 +16,6 @@ router.route('/')
     res.send(savedItem);
   });
 
-
 router.route('/:id')
   .get(async (req, res) => {
     const data = await GuestBook.findById(req.params.id);
