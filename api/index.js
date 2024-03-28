@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error(err));
 
 // 라우트
-const guestbookRouter = require('./routes/GuestBook');
+const guestbookRouter = require('../routes/GuestBook');
 app.use('/', guestbookRouter);
 
 
