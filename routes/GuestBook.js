@@ -19,15 +19,15 @@ router.route('/')
 
 router.route('/:id')
   .get(async (req, res) => {
-    const data = await BucketList.findById(req.params.id);
+    const data = await GuestBook.findById(req.params.id);
     res.send(data);
   })
   .put(async (req, res) => {
-    const updatedItem = await BucketList.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedItem = await GuestBook.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.send(updatedItem);
   })
   .delete(async (req, res) => {
-    await BucketList.findByIdAndRemove(req.params.id);
+    await GuestBook.findByIdAndRemove(req.params.id);
     res.send({ message: 'Item removed' });
   });
 
