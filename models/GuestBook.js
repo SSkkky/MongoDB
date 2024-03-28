@@ -15,4 +15,4 @@ const guestbookSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('skys', guestbookSchema);
+module.exports = mongoose.model('guestbooks', guestbookSchema);
