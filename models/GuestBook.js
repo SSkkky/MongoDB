@@ -12,6 +12,10 @@ const guestbookSchema = new mongoose.Schema({
   date: {
     type: String,
     required: true
+  },
+  password: {
+    type: String,
+    required: true
   }
 });
 
