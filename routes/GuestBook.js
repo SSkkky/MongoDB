@@ -26,8 +26,10 @@ router.route('/:id')
     res.send(updatedItem);
   })
   .delete(async (req, res) => {
-    await GuestBook.findByIdAndRemove(req.params.id);
-    res.send({ message: 'Item removed' });
+    console.log('req-----------',req.params)
+    console.log('params-----------', req.params)
+    // await GuestBook.findByIdAndRemove(req.params.id);
+    res.send(req.params.id);
   });
 
 module.exports = router;
