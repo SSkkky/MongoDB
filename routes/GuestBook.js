@@ -22,17 +22,20 @@ router.route('/:id')
     const data = await GuestBook.findById(req.params.id);
     res.send(data);
   })
+  .delete(async (req, res) => {
+    console.log(req.params.id)
+    console.log(typeof(req.params.id))
+    // await GuestBook.findByIdAndDelete({"_id": mongoose.Types.ObjectId(req.params.id)});
+    // await GuestBook.findOneAndDelete({"_id": mongoose.Types.ObjectId(req.params.id)});
+    const updateData = await GuestBook.find({});
+    res.send(updateData);
+  })
   .put(async (req, res) => {
     res.send(req.body)
     // await GuestBook.findByIdAndUpdate(req.params.id, req.body, { new: true });
     // const updateData = await GuestBook.find({});
     // res.send(updateData);
   })
-  .delete(async (req, res) => {
-    await GuestBook.findByIdAndDelete({"_id": mongoose.Types.ObjectId(req.params.id)});
-    // await GuestBook.findOneAndDelete({"_id": mongoose.Types.ObjectId(req.params.id)});
-    const updateData = await GuestBook.find({});
-    res.send(updateData);
-  });
+  
 
 module.exports = router;
