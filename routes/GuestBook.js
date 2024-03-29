@@ -24,11 +24,10 @@ router.route('/:id')
     res.send(data);
   })
   .delete(async (req, res) => {
-    // await GuestBook.findByIdAndDelete({"_id": mongoose.Types.ObjectId(req.params.id)});
+    await GuestBook.findByIdAndDelete(req.params.id);
     // await GuestBook.findOneAndDelete({"_id": mongoose.Types.ObjectId(req.params.id)});
-    // const updateData = await GuestBook.find({});
-    // res.send(updateData);
-    res.send(req.params.id);
+    const updateData = await GuestBook.find({});
+    res.send(updateData);
   })
   .put(async (req, res) => {
     res.send(req.body)
