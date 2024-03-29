@@ -25,15 +25,15 @@ router.route('/:id')
   })
   .delete(async (req, res) => {
     await GuestBook.findByIdAndDelete(req.params.id);
-    // await GuestBook.findOneAndDelete({"_id": mongoose.Types.ObjectId(req.params.id)});
     const updateData = await GuestBook.find({});
     res.send(updateData);
   })
   .put(async (req, res) => {
     res.send(req.body)
-    // await GuestBook.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    // const updateData = await GuestBook.find({});
-    // res.send(updateData);
+    return;
+    await GuestBook.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updateData = await GuestBook.find({});
+    res.send(updateData);
   })
   
 
