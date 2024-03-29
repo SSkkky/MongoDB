@@ -22,14 +22,15 @@ router.route('/:id')
     res.send(data);
   })
   .put(async (req, res) => {
-    const updatedItem = await GuestBook.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.send(updatedItem);
+    res.send(req.body)
+    // await GuestBook.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    // const updateData = await GuestBook.find({});
+    // res.send(updateData);
   })
   .delete(async (req, res) => {
-    console.log('req-----------',req.params)
-    console.log('params-----------', req.params)
-    // await GuestBook.findByIdAndRemove(req.params.id);
-    res.send(req.params.id);
+    await GuestBook.findByIdAndRemove(req.params.id);
+    const updateData = await GuestBook.find({});
+    res.send(updateData);
   });
 
 module.exports = router;
