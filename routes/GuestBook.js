@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const GuestBook = require('../models/GuestBook');
+const mongoose = require('mongoose');
 
 
 router.route('/')
@@ -30,7 +31,7 @@ router.route('/:id')
   .delete(async (req, res) => {
     await GuestBook.findOneAndDelete({"_id": mongoose.Types.ObjectId(req.params.id)});
     const updateData = await GuestBook.find({});
-    res.send({"_id": mongoose.Types.ObjectId(req.params.id)});
+    res.send(updateData);
   });
 
 module.exports = router;
