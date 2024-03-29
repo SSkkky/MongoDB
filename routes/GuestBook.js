@@ -29,8 +29,7 @@ router.route('/:id')
     res.send(updateData);
   })
   .put(async (req, res) => {
-    res.send(req.body)
-    await GuestBook.findByIdAndUpdate(req.params.id, req.body);
+    await GuestBook.findByIdAndUpdate(req.params.id, req.body, { new: true });
     const updateData = await GuestBook.find({});
     res.send(updateData);
   })
