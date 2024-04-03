@@ -9,17 +9,22 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const guestbookRouter = require('../routes/GuestBook');
+const vueRouter = require('../routes/Vue');
+
+
+
 // MongoDB 연결
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB에 성공적으로 연결되었습니다.'))
   .catch(err => console.error(err));
 
-// 라우트
-const guestbookRouter = require('../routes/GuestBook');
-app.use('/GuestBook', guestbookRouter);
 
-const vueRouter = require('../routes/Vue');
+
+// 라우트
+app.use('/GuestBook', guestbookRouter);
 app.use('/Vue', vueRouter);
+
 
 
 const PORT = process.env.PORT || 5000;
