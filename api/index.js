@@ -16,7 +16,10 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // 라우트
 const guestbookRouter = require('../routes/GuestBook');
-app.use('/', guestbookRouter);
+app.use('/GuestBook', guestbookRouter);
+
+const vueRouter = require('../routes/Vue');
+app.use('/Vue', vueRouter);
 
 
 const PORT = process.env.PORT || 5000;
