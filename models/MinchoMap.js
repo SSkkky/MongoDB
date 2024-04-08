@@ -12,8 +12,8 @@ const minchomapSchema = new mongoose.Schema({
   tel: { type: String },
   address: { type: String, required: true },
   coordinate: {
-    x: { type: number, required: true },
-    y: { type: number, required: true }
+    x: { type: Number, required: true },
+    y: { type: Number, required: true }
   },
   openHour: { type: Number },
   closeHour: { type: Number },
