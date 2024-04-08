@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 
 router.route('/')
   .get(async (req, res) => {
-    console.log('get')
     const data = await GuestBook.find({});
     res.send(data);
     console.log(data)
@@ -33,6 +32,6 @@ router.route('/:id')
     const updateData = await GuestBook.find({});
     res.send(updateData);
   })
-  
+
 
 module.exports = router;

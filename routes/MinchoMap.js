@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 
 router.route('/')
     .get(async (req, res) => {
-        console.log('get')
         const data = await MinchoMap.find({});
         res.send(data);
         console.log(data)
