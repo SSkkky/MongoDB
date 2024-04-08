@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 const guestbookRouter = require('../routes/GuestBook');
-const vueRouter = require('../routes/Vue');
+const minchomapRouter = require('../routes/MinchoMap');
 
 
 
@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // 라우트
 app.use('/GuestBook', guestbookRouter);
-app.use('/Vue', vueRouter);
+app.use('/minchomap', minchomapRouter);
 
 
 
