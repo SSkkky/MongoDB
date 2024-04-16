@@ -9,7 +9,7 @@ router.route('/')
     .get(async (req, res) => {
         const data = await MinchoMap.find({});
         res.send(data);
-        console.log(data)
+        // console.log(data)
     })
     .post(async (req, res) => {
         const newItem = new MinchoMap(req.body);
@@ -19,7 +19,7 @@ router.route('/')
 
 router.route('/:id')
     .get(async (req, res) => {
-        console.log(req.params)
+        // console.log(req.params)
         const data = await MinchoMap.findById(req.params.id);
         res.send(data);
     })
@@ -34,16 +34,19 @@ router.route('/:id')
         res.send(updateData);
     })
 
-router.route('/user/list/:id')
-    .get(async (req, res) => {
-        const data = await MinchoMapUser.findById(req.params.id);
-        res.send(data);
-    })
+router.route('/user/list')
     .post(async (req, res) => {
         const newItem = new MinchoMapUser(req.body);
         const savedItem = await newItem.save();
         res.send(savedItem);
     });
+
+router.route('/user/list/:email')
+    .get(async (req, res) => {
+        // console.log(req.params.email)
+        const data = await MinchoMapUser.findOne({email: req.params.email});
+        res.send(data);
+    })
 
 router.route('/oauth/callback')
     .get(async (req, res) => {
@@ -78,6 +81,9 @@ router.route('/oauth/callback')
             , config)
             .then(response => {
                 console.log('----------엑세스 토큰 발행 성공---------')
+                const resToken = response.data;
+                console.log(response.data)
+                console.log('----------엑세스 토큰 발행 성공---------')
                 const accessToken = response.data.access_token;
 
                 axios.post("https://kapi.kakao.com/v2/user/me", {}, {
@@ -89,16 +95,28 @@ router.route('/oauth/callback')
                     console.log('---------------유저 데이터 가져오기 성공!')
                     
                     const getData = async()=>{
-                         const userData = await axios.get(`https://mongodb-plum.vercel.app/minchomap/user/list/${ress.data.id}`)
+                         const userData = await axios.get(`http://localhost:5000/minchomap/user/list/${ress.data.kakao_account.email}`)
+                        console.log('userData.data : ', userData.data)
+                        if(!userData.data.email){
+                            // 회원 등록
+                            console.log('회원을 등록합니다!!')
+                            const userRoot = ress.data;
+                            const newUserData = {
+                                "id" : userRoot.id,
+                                "nickname": userRoot.kakao_account.profile.nickname,
+                                "profile_image": userRoot.kakao_account.profile.profile_image,
+                                "email": userRoot.kakao_account.email
+                            };
+                            axios.post('http://localhost:5000/minchomap/user/list', newUserData)
+                            console.log('기존 고객입니당')
+                        }
 
-                        if(userData.length < 1){ console.log('신규 고객입니다.') }else{ console.log(userData) }
+                        res.redirect(`http://localhost:3000`)
                     }
+                    getData()
 
                     
-                    
-                    getData()
-                    
-                    // res.redirect(`http://localhost:3000/oauth?properties=${ress.data.properties}&id=${ress.data.id}&connected_at=${ress.data.connected_at}`)
+
                 }).catch(error => {
                     console.log('---------엑세스 토큰은 발급되었는데 오류나용 -------')
                     console.log(error)
