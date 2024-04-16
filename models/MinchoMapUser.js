@@ -7,4 +7,4 @@ const minchomapUserSchema = new mongoose.Schema({
   email : { type: String, required: true }
 });
 
-module.exports = mongoose.model('minchomapUsers', minchomapUserSchema);
+module.exports = mongoose.model('minchoUsers', minchomapUserSchema);
