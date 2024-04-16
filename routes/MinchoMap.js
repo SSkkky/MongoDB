@@ -65,12 +65,21 @@ router.route('/oauth/callback')
             }
             , config)
             .then(response => {
-                console.log('----------응답 성공---------')
-                console.log(response)
-                console.log(response.data.access_token)
-                // const tokenToJson = JSON.parse(response.body);
-                // res.json(tokenToJson);
-                // console.log(tokenToJson);
+                console.log('----------엑세스 토큰 발행 성공---------')
+                const accessToken = response.data.access_token;
+
+                axios.post("https://kapi.kakao.com/v2/user/me", {}, {
+                    headers: {
+                        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+                        "Authorization": `Bearer ${accessToken}`
+                    }
+                }).then(ress => {
+                    console.log('---------------유저 데이터 가져오기 성공!')
+                    res.send(ress.data)
+                }).catch(error => {
+                    console.log('---------엑세스 토큰은 발급되었는데 오류나용 -------')
+                    console.log(error)
+                })
             })
             .catch(error => {
                 console.log('------코드는 발급되었는데 오류남--------')
