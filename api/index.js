@@ -9,8 +9,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const guestbookRouter = require('./routes/GuestBook');
-const minchomapRouter = require('./routes/MinchoMap');
+const guestbookRouter = require('../routes/GuestBook');
+const minchomapRouter = require('../routes/MinchoMap');
 
 
 
