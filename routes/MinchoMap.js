@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const MinchoMap = require('../models/MinchoMap');
+const MinchoMapUser = require('../models/MinchoMapUser');
 const mongoose = require('mongoose');
 const axios = require('axios');
 
@@ -33,6 +34,17 @@ router.route('/:id')
         res.send(updateData);
     })
 
+router.route('/user/list/:id')
+    .get(async (req, res) => {
+        const data = await MinchoMapUser.findById(req.params.id);
+        res.send(data);
+    })
+    .post(async (req, res) => {
+        const newItem = new MinchoMapUser(req.body);
+        const savedItem = await newItem.save();
+        res.send(savedItem);
+    });
+
 router.route('/oauth/callback')
     .get(async (req, res) => {
         let query = req.query;
@@ -41,7 +53,7 @@ router.route('/oauth/callback')
         console.log('uri = ', process.env.REDIRECT_URI)
 
         if (!Object.prototype.hasOwnProperty.call(query, "code")) {
-            return res.status(400).send("invalid_code");
+            return res.status(400).send("인가 코드가 없습니다");
         }
 
         const formData = new FormData();
@@ -75,7 +87,18 @@ router.route('/oauth/callback')
                     }
                 }).then(ress => {
                     console.log('---------------유저 데이터 가져오기 성공!')
-                    res.send(ress.data)
+                    
+                    const getData = async()=>{
+                         const userData = await axios.get(`https://mongodb-plum.vercel.app/minchomap/user/list/${ress.data.id}`)
+
+                        if(userData.length < 1){ console.log('신규 고객입니다.') }else{ console.log(userData) }
+                    }
+
+                    
+                    
+                    getData()
+                    
+                    // res.redirect(`http://localhost:3000/oauth?properties=${ress.data.properties}&id=${ress.data.id}&connected_at=${ress.data.connected_at}`)
                 }).catch(error => {
                     console.log('---------엑세스 토큰은 발급되었는데 오류나용 -------')
                     console.log(error)
