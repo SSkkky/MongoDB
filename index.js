@@ -13,7 +13,6 @@ const guestbookRouter = require('./routes/GuestBook');
 const minchomapRouter = require('./routes/MinchoMap');
 
 
-
 // MongoDB 연결
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB에 성공적으로 연결되었습니다.'))

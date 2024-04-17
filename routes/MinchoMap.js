@@ -4,7 +4,9 @@ const MinchoMap = require('../models/MinchoMap');
 const MinchoMapUser = require('../models/MinchoMapUser');
 const mongoose = require('mongoose');
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
 
+// 매장
 router.route('/')
     .get(async (req, res) => {
         const data = await MinchoMap.find({});
@@ -17,6 +19,7 @@ router.route('/')
         res.send(savedItem);
     });
 
+// 매장(디테일)
 router.route('/:id')
     .get(async (req, res) => {
         // console.log(req.params)
@@ -34,20 +37,27 @@ router.route('/:id')
         res.send(updateData);
     })
 
+// 유저 전체 리스트 조회, 추가
 router.route('/user/list')
+    .get(async (req, res) => {
+        const data = await MinchoMapUser.find({});
+        res.send(data);
+    })
     .post(async (req, res) => {
         const newItem = new MinchoMapUser(req.body);
         const savedItem = await newItem.save();
         res.send(savedItem);
     });
 
+// 유저 이메일 조회
 router.route('/user/list/:email')
     .get(async (req, res) => {
         // console.log(req.params.email)
-        const data = await MinchoMapUser.findOne({email: req.params.email});
+        const data = await MinchoMapUser.findOne({ email: req.params.email });
         res.send(data);
     })
 
+// 카카오 로그인 콜백
 router.route('/oauth/callback')
     .get(async (req, res) => {
         let query = req.query;
@@ -93,16 +103,16 @@ router.route('/oauth/callback')
                     }
                 }).then(ress => {
                     console.log('---------------유저 데이터 가져오기 성공!')
-                    
-                    const getData = async()=>{
-                         const userData = await axios.get(`http://localhost:5000/minchomap/user/list/${ress.data.kakao_account.email}`)
+
+                    const getData = async () => {
+                        const userData = await axios.get(`http://localhost:5000/minchomap/user/list/${ress.data.kakao_account.email}`)
                         console.log('userData.data : ', userData.data)
-                        if(!userData.data.email){
+                        if (!userData.data.email) {
                             // 회원 등록
                             console.log('회원을 등록합니다!!')
                             const userRoot = ress.data;
                             const newUserData = {
-                                "id" : userRoot.id,
+                                "id": userRoot.id,
                                 "nickname": userRoot.kakao_account.profile.nickname,
                                 "profile_image": userRoot.kakao_account.profile.profile_image,
                                 "email": userRoot.kakao_account.email
@@ -115,7 +125,7 @@ router.route('/oauth/callback')
                     }
                     getData()
 
-                    
+
 
                 }).catch(error => {
                     console.log('---------엑세스 토큰은 발급되었는데 오류나용 -------')
@@ -128,5 +138,12 @@ router.route('/oauth/callback')
             });
     })
 
+
+// jwt 토큰
+router.route('/jwt')
+    .post(async (req, res) => {
+        const token = jwt.sign({ data: req.body }, 'secret', { expiresIn: '1h' });
+        res.send(token);
+    })
 
 module.exports = router;
