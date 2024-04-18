@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const MinchoMap = require('../models/MinchoMap');
 const MinchoMapUser = require('../models/MinchoMapUser');
+const MinchoMapReview = require('../models/MinchoMapReview');
 const mongoose = require('mongoose');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
@@ -34,6 +35,28 @@ router.route('/:id')
     .put(async (req, res) => {
         await MinchoMap.findByIdAndUpdate(req.params.id, req.body, { new: true });
         const updateData = await MinchoMap.find({});
+        res.send(updateData);
+    })
+
+// 리뷰(디테일)
+router.route('/review')
+    .get(async (req, res) => {
+        const data = await MinchoMapReview.findById(req.params.id);
+        res.send(data);
+    })
+    .post(async (req, res) => {
+        const newItem = new MinchoMapReview(req.body);
+        const savedItem = await newItem.save();
+        res.send(savedItem);
+    })
+    .delete(async (req, res) => {
+        await MinchoMap.findByIdAndDelete(req.params.id);
+        const updateData = await MinchoMapReview.find({});
+        res.send(updateData);
+    })
+    .put(async (req, res) => {
+        await MinchoMap.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updateData = await MinchoMapReview.find({});
         res.send(updateData);
     })
 
