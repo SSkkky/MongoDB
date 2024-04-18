@@ -41,7 +41,7 @@ router.route('/:id')
 // 리뷰(디테일)
 router.route('/review')
     .get(async (req, res) => {
-        const data = await MinchoMapReview.findById(req.params.id);
+        const data = await MinchoMapReview.find({});
         res.send(data);
     })
     .post(async (req, res) => {
@@ -49,13 +49,21 @@ router.route('/review')
         const savedItem = await newItem.save();
         res.send(savedItem);
     })
+
+// 리뷰(디테일) 개별
+router.route('/review/:id')
+    .get(async (req, res) => {
+        // console.log(req.params)
+        const data = await MinchoMapReview.find({ postId : req.params.id });
+        res.send(data);
+    })
     .delete(async (req, res) => {
-        await MinchoMap.findByIdAndDelete(req.params.id);
+        await MinchoMapReview.findByIdAndDelete(req.params.id);
         const updateData = await MinchoMapReview.find({});
         res.send(updateData);
     })
     .put(async (req, res) => {
-        await MinchoMap.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        await MinchoMapReview.findByIdAndUpdate(req.params.id, req.body);
         const updateData = await MinchoMapReview.find({});
         res.send(updateData);
     })
@@ -128,7 +136,7 @@ router.route('/oauth/callback')
                     console.log('---------------유저 데이터 가져오기 성공!')
 
                     const getData = async () => {
-                        const userData = await axios.get(`http://localhost:5000/minchomap/user/list/${ress.data.kakao_account.email}`)
+                        const userData = await axios.get(`${process.env.REDIRECT_URI}/user/list/${ress.data.kakao_account.email}`)
                         console.log('userData.data : ', userData.data)
                         if (!userData.data.email) {
                             // 회원 등록
@@ -140,11 +148,11 @@ router.route('/oauth/callback')
                                 "profile_image": userRoot.kakao_account.profile.profile_image,
                                 "email": userRoot.kakao_account.email
                             };
-                            axios.post('http://localhost:5000/minchomap/user/list', newUserData)
+                            axios.post(`${process.env.REDIRECT_URI}/user/list`, newUserData)
                             console.log('기존 고객입니당')
                         }
 
-                        res.redirect(`http://localhost:3000`)
+                        res.redirect(process.env.REDIRECT_URI)
                     }
                     getData()
 
