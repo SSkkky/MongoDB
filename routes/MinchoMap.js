@@ -18,6 +18,19 @@ router.route('/')
         const newItem = new MinchoMap(req.body);
         const savedItem = await newItem.save();
         res.send(savedItem);
+    })
+    .put(async (req, res) => {
+        console.log('----------------------------')
+        console.log(req.body)
+        await MinchoMap.findByIdAndUpdate(req.body._id, { $set : req.body });
+        const updateData = await MinchoMap.find({});
+        res.send(updateData);
+    })
+
+router.route('/state')
+    .get(async (req, res) => {
+        const data = await MinchoMap.find({"state" : true });
+        res.send(data);
     });
 
 // 매장(디테일)
@@ -83,8 +96,7 @@ router.route('/user/list')
 // 유저 이메일 조회
 router.route('/user/list/:email')
     .get(async (req, res) => {
-        // console.log(req.params.email)
-        const data = await MinchoMapUser.findOne({ email: req.params.email });
+        const data = await MinchoMapUser.find({});
         res.send(data);
     })
 
